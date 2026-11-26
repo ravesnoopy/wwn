@@ -1,0 +1,16 @@
+[Unit]
+Description=WhiteWidow Net - monitoreo de redes autorizadas
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=@WW_DIR@
+Environment=PYTHONPATH=@WW_DIR@
+ExecStart=@WW_DIR@/.venv/bin/python -m whitewidow_net serve
+Restart=on-failure
+RestartSec=5
+PrivateTmp=yes
+
+[Install]
+WantedBy=default.target

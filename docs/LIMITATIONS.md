@@ -1,0 +1,21 @@
+# Limitaciones (v1.2.0)
+- **Qué web abre cada dispositivo (YouTube, Netflix, adultos) y cuántos MB/GB usa cada uno NO se ve con escucha pasiva** en una red normal: ese tráfico no llega a este equipo. Las alertas por servicio funcionan para esta computadora y para otros dispositivos solo si la interfaz recibe su tráfico (puerto espejo/gateway) o hay un DNS que registre consultas (AdGuard Home, TShark). Los MB/GB mostrados son los de la interfaz de ESTE equipo.
+- **Sondeo de descubrimiento (ARP/mDNS/SSDP):** solo en redes autorizadas y rangos privados de hasta /22. Equipos apagados, en suspensión profunda o con aislamiento de clientes en el WiFi (AP isolation) pueden no responder. Teléfono vs. tablet no se distingue sin nombre o servicios: se muestra "Teléfono o tablet" y se puede corregir a mano.
+- **YouTube por QUIC/DoH:** la detección usa consultas DNS y SNI de TLS; si el navegador usa DNS cifrado (DoH) y QUIC, algunas visitas de esta computadora pueden no verse.
+- **Escucha pasiva:** solo oye lo que llega a la interfaz de este equipo: tráfico dirigido a él y anuncios de difusión/multidifusión. En Wi-Fi/Ethernet normal NO ve el tráfico privado de otros dispositivos, aunque active el modo promiscuo (un switch/AP no lo reenvía). Para eso hay que estar en el camino (gateway, puerto espejo).
+- Los **escaneos que detecta** son los dirigidos a este equipo o los barridos ARP de difusión. Un escaneo de un tercero hacia otro dispositivo no es visible.
+- **Intentos fallidos:** solo los hechos contra este equipo (puerto cerrado) y los RST visibles. No hay registro de intentos de acceso fallidos al panel del modem ni a otros equipos.
+- Dispositivos que no emiten DHCP/mDNS/SSDP/NetBIOS durante la escucha solo se conocen por ARP o por el escaneo activo. Los que están en silencio o con la pantalla apagada pueden no aparecer.
+- **Permiso de captura:** requiere que el sistema de archivos admita capabilities (ext4 normal sí). Si el Python se actualiza, vuelve a ejecutar `./scripts/enable-sniffer.sh`.
+- El sniffer analiza paquetes en Python: en enlaces muy saturados (con tráfico ajeno visible) puede perder paquetes.
+- **Visibilidad de otros equipos.** Un equipo conectado como cliente solo ve su propio tráfico. Conexiones, dominios y volumen de *otros* dispositivos requieren estar en el camino del tráfico (gateway, puerto espejo) con TShark/Zeek/ntopng, o usar AdGuard Home como DNS. WhiteWidow no hace ARP spoofing ni intercepta tráfico.
+- **HTTPS.** Solo se observan dominios (DNS/SNI), nunca URLs ni contenido.
+- **Volumen por conexión.** psutil no lo proporciona; solo hay tráfico por interfaz. Requiere integraciones de captura.
+- **Tipo de dispositivo, SO y aplicaciones por puerto** son estimaciones heurísticas. Solo las aplicaciones por proceso del endpoint son "confirmadas".
+- **MAC aleatoria** de móviles puede aparecer como dispositivo nuevo al reconectar.
+- **Control:** nftables solo afecta a otros equipos si este es el gateway con reenvío IP; AdGuard solo a quien use ese DNS. Sin adaptador, la acción se rechaza (nunca se simula éxito). No implementados: límite de ancho de banda, horarios, grupos con políticas, OPNsense/pfSense, routers con API propietaria, Zeek, ntopng, Arkime.
+- **Detecciones** son reglas simples (umbrales/estadística). Generan indicios, con falsos positivos posibles (p. ej. NTP o actualizaciones parecen beaconing).
+- **Detección de escaneo entrante** solo ve conexiones que llegan a puertos de este equipo.
+- Sin HTTPS propio en el dashboard (escucha en localhost); sin multiusuario con cuentas, solo 2 tokens.
+- Windows/macOS y PostgreSQL: arquitectura preparada, no implementados. Solo IPv4.
+- Un solo equipo por instancia; no hay agentes remotos aún.

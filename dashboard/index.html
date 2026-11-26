@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhiteWidow Net</title>
+<script>try{var t=localStorage.getItem("ww_theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="login" class="login" hidden>
+  <div class="login-box">
+    <div class="brand big"><span class="mark">◈</span> WHITEWIDOW <b>NET</b></div>
+    <p>Este servidor exige token (modo LAN o <code>auth_enabled</code>). Míralo con <code>./start.sh --token</code>.</p>
+    <input id="tok" type="password" placeholder="Token" autocomplete="off">
+    <button id="loginBtn">Entrar</button>
+    <p id="loginErr" class="err"></p>
+  </div>
+</div>
+<div id="app" hidden>
+  <header>
+    <button id="menuBtn" aria-label="Menú">☰</button>
+    <div class="brand"><span class="mark">◈</span> WHITEWIDOW <b>NET</b></div>
+    <div class="hd" id="hdNet" title="Red (gateway)"><small>Red</small><b id="netName">—</b><span class="mut" id="netGw"></span></div>
+    <div class="hd" id="hdEp" title="Endpoint: este equipo"><small>Endpoint</small><b id="epName">—</b><span class="mut" id="epIp"></span><span class="dot" id="epDot"></span><span id="epState" class="mut">—</span></div>
+    <div id="modePill" class="pill">pasivo</div>
+    <button id="themeBtn" class="sp" title="Cambiar entre modo claro y oscuro" aria-label="Cambiar tema">☀</button>
+    <button id="logout" class="ghost">Salir</button>
+  </header>
+  <nav id="nav"></nav>
+  <main id="view"></main>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
